@@ -4,7 +4,7 @@ export default class Board {
     array: Array<Array<number>> = [];
 
     static matrix(): Array<Array<number>> {
-        const result = [];
+        const result: Array<Array<number>> = [];
 
         for (let i = 0; i < 9; i++) {
             const currentRow: Array<number> = [];
@@ -75,27 +75,27 @@ export default class Board {
         this.drawNumbers();
     }
 
-  constructor(array: Array<Array<number>> | undefined) {
-    if (array === undefined) {
-      this.initialize();
-    } else {
-      this.array = array;
-    }
-  }
-
-  writeCell(y: number, x: number, digit: number): Board {
-    const arrayCopy: Array<Array<number>> = this.array.map((row) => (row.map((digit) => digit)));
-
-    if (!(0 <= y && y < 9 && 0 <= x && x < 9)) {
-      throw "Cell position is invalid!";
-    }
-    if (!(0 <= digit && digit <= 9)) {
-      throw "Digit for cell is invalid!";
+    constructor(array: Array<Array<number>> | undefined) {
+        if (array === undefined) {
+            this.initialize();
+        } else {
+            this.array = array;
+        }
     }
 
-    arrayCopy[y][x] = digit;
-    return new Board(arrayCopy);
-  }
+    writeCell(y: number, x: number, digit: number): Board {
+        const arrayCopy: Array<Array<number>> = this.array.map((row) => (row.map((digit) => digit)));
+
+        if (!(0 <= y && y < 9 && 0 <= x && x < 9)) {
+            throw "Cell position is invalid!";
+        }
+        if (!(0 <= digit && digit <= 9)) {
+            throw "Digit for cell is invalid!";
+        }
+
+        arrayCopy[y][x] = digit;
+        return new Board(arrayCopy);
+    }
 
     // Returns wether or not the number in the cell with coordinates
     // (y,x) is valid.
