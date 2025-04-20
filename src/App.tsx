@@ -7,24 +7,18 @@ function Cell({value, selected, select, setDigit, moveInDirection}:
     {value: number, selected: boolean, select: any, setDigit: any, moveInDirection: any}
   ) {
   return <input
-    value={1 <= value && value <= 9 ? value : undefined}
+    value={1 <= value && value <= 9 ? value.toString() : ''}
     className={selected ? "selected" : ""}
-    onClick={() => {console.log("SELECTING CELL"); select();}}
+    onSelect={select}
     onChange={(event) => {
-      console.log("KEY DOWN");
-
       if (!selected || !event.target.value.length) return;
 
       const eventKey: string = event.target.value[event.target.value.length - 1];
-
-      console.log("Key down. Checking for direction keys.");
 
       if (eventKey === 'w' || eventKey === 's' || eventKey === 'a' || eventKey === 'd') {
         moveInDirection(eventKey);
         return;
       }
-
-      console.log("Key down. Checking for digit keys.");
 
       const eventKeyNumber: number = parseInt(eventKey);
 
