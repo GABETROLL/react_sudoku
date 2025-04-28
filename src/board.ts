@@ -100,6 +100,14 @@ export default class Board {
     // Returns wether or not the number in the cell with coordinates
     // (y,x) is valid.
     // (Yes, the y-axis comes first, and is the vertical axis)
+    //
+    // `zeroValid` indicates to the method if a cell being empty
+    // (the cell's value is 0) should be considered valid.
+    //
+    // This may be necessary, for example, if the player wants to see what
+    // parts of the board they just filled are currently valid, without
+    // highlighting all of the empty cells, which may be overwhelming.
+    // (I can't remember the exact reason this was needed, though)
     valid_cell(y: number, x: number, zeroValid: boolean): boolean {
         const cell_number = this.array[y][x];
 

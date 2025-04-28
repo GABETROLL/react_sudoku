@@ -8,3 +8,7 @@
 .selected {
   background-color: #8080FF;
 }
+
+.invalid {
+  background-color: #FF8080;
+}

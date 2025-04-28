@@ -3,12 +3,17 @@ import './App.css';
 import { ReactElement, useState } from 'react';
 
 
-function Cell({value, selected, select, setDigit, moveInDirection}:
-    {value: number, selected: boolean, select: any, setDigit: any, moveInDirection: any}
+function Cell({value, selected, select, setDigit, moveInDirection, showInvalid}:
+    {value: number, selected: boolean, select: any, setDigit: any, moveInDirection: any, showInvalid: boolean}
   ) {
+
+  let className = "";
+  if (selected) className += "selected";
+  if (showInvalid) className += " invalid";
+
   return <input
     value={1 <= value && value <= 9 ? value.toString() : ''}
-    className={selected ? "selected" : ""}
+    className={className}
     onSelect={select}
     onChange={(event) => {
       if (!selected || !event.target.value.length) return;
@@ -33,6 +38,9 @@ function Cell({value, selected, select, setDigit, moveInDirection}:
 function App() {
   const [array, setArray]: [number[][], any] = useState(Board.matrix());
   const [selectedCell, setSelectedCell]: [number[], any] = useState([0, 0]);
+  const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
+
+  const board = new Board(array);
 
   const tableRows: Array<ReactElement> = [];
 
@@ -46,8 +54,8 @@ function App() {
           <Cell
             value={digit}
             selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
-            select={() => setSelectedCell([y, x])}
-            setDigit={(digit: number) => setArray((new Board(array)).writeCell(y, x, digit).array)}
+            select={() => { setSelectedCell([y, x]); setShowingInvalidCells(false); }}
+            setDigit={(digit: number) => setArray(board.writeCell(y, x, digit).array)}
             moveInDirection={(direction: string) => {
               if (direction === 'w' && y > 0) {
                 setSelectedCell([y - 1, x]);
@@ -59,6 +67,7 @@ function App() {
                 setSelectedCell([y, x + 1]);
               }
             }}
+            showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
           />
         </td>
       );
@@ -74,6 +83,7 @@ function App() {
           {tableRows}
         </tbody>
       </table>
+      <button onClick={() => setShowingInvalidCells(true)}>Submit</button>
     </>
   );
 }
