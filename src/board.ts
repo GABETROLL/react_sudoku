@@ -18,6 +18,10 @@ export default class Board {
   
     return result;
     }
+
+    static validNumber(x: number): boolean {
+        return Number.isInteger(x) && 0 <= x && x <= 9;
+    }
   
     drawNumbers(): void {
         let i = 0;

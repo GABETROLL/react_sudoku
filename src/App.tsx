@@ -1,37 +1,22 @@
 import Board from './board';
 import './App.css';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 
 
-function Cell({value, selected, select, setDigit, moveInDirection, showInvalid}:
-    {value: number, selected: boolean, select: any, setDigit: any, moveInDirection: any, showInvalid: boolean}
+function Cell({value, selected, showInvalid}:
+    {value: number, selected: boolean, showInvalid: boolean}
   ) {
-
-  let className = "";
-  if (selected) className += "selected";
+  let className = "cell";
+  if (selected) className += " selected";
   if (showInvalid) className += " invalid";
 
-  return <input
-    value={1 <= value && value <= 9 ? value.toString() : ''}
-    className={className}
-    onSelect={select}
-    onChange={(event) => {
-      if (!selected || !event.target.value.length) return;
-
-      const eventKey: string = event.target.value[event.target.value.length - 1];
-
-      if (eventKey === 'w' || eventKey === 's' || eventKey === 'a' || eventKey === 'd') {
-        moveInDirection(eventKey);
-        return;
-      }
-
-      const eventKeyNumber: number = parseInt(eventKey);
-
-      if (0 <= eventKeyNumber && eventKeyNumber <= 9) {
-        setDigit(eventKeyNumber);
-      }
-    }}
-  />;
+  return (
+    <td className={className}>
+      <p>
+        {Board.validNumber(value) && value > 0 ? value.toString() : ''}
+      </p>
+    </td>
+  );
 }
 
 
@@ -42,6 +27,41 @@ function App() {
 
   const board = new Board(array);
 
+  useEffect(
+    () => {
+      function keyDownListener(event: KeyboardEvent) {
+        if (event.key === "a" && selectedCell[0] > 0) {
+          setSelectedCell([selectedCell[0], selectedCell[1] - 1]);
+          return;
+        } else if (event.key === "d" && selectedCell[0] < 8) {
+          setSelectedCell([selectedCell[0], selectedCell[1] + 1]);
+          return;
+        } else if (event.key === "w" && selectedCell[1] > 0) {
+          setSelectedCell([selectedCell[0] - 1, selectedCell[1]]);
+          return;
+        } else if (event.key === "s" && selectedCell[1] < 8) {
+          setSelectedCell([selectedCell[0] + 1, selectedCell[1]]);
+          return;
+        }
+
+        const eventKeyNumber: number = parseInt(event.key);
+
+        if (Number.isInteger(eventKeyNumber) && eventKeyNumber >= 0 && eventKeyNumber <= 9) {
+          setArray(board.writeCell(selectedCell[0], selectedCell[1], eventKeyNumber).array);
+          // return; <-------
+        }
+      }
+
+      const result = () => {
+        document.removeEventListener("keydown", keyDownListener);
+      };
+
+      document.addEventListener("keydown", keyDownListener);
+
+      return result;
+    },
+  );
+
   const tableRows: Array<ReactElement> = [];
 
   for (const [y, row] of array.entries()) {
@@ -49,27 +69,12 @@ function App() {
 
     for (const [x, digit] of row.entries()) {
       tableRow.push(
-        // TODO: DO NOT ALLOW THE PLAYER TO CHANGE THE DIGIT VALUE TO A NUMBER THAT'S NOT 0-9.
-        <td key={`${y}${x}`}>
-          <Cell
-            value={digit}
-            selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
-            select={() => { setSelectedCell([y, x]); setShowingInvalidCells(false); }}
-            setDigit={(digit: number) => setArray(board.writeCell(y, x, digit).array)}
-            moveInDirection={(direction: string) => {
-              if (direction === 'w' && y > 0) {
-                setSelectedCell([y - 1, x]);
-              } else if (direction === 's' && y < 8) {
-                setSelectedCell([y + 1, x]);
-              } else if (direction === 'a' && x > 0) {
-                setSelectedCell([y, x - 1]);
-              } else if (direction === 'd' && x < 8) {
-                setSelectedCell([y, x + 1]);
-              }
-            }}
-            showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
-          />
-        </td>
+        <Cell
+          key={`${y}${x}`}
+          value={digit}
+          selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
+          showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
+        />
       );
     }
 
@@ -78,8 +83,8 @@ function App() {
 
   return (
     <>
-      <table>
-        <tbody>
+      <table className="board">
+        <tbody className="boardBody">
           {tableRows}
         </tbody>
       </table>
