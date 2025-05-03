@@ -1,16 +1,19 @@
 import shuffleArray from './shuffleArray';
 
-export default class Board {
-    array: Array<Array<number>> = [];
+export type CellInfo = {digit: number, permanent: boolean};
 
-    static matrix(): Array<Array<number>> {
-        const result: Array<Array<number>> = [];
+
+export default class Board {
+    array: CellInfo[][] = [];
+
+    static matrix(): CellInfo[][] {
+        const result: CellInfo[][] = [];
 
         for (let i = 0; i < 9; i++) {
-            const currentRow: Array<number> = [];
+            const currentRow: CellInfo[] = [];
   
             for (let j = 0; j < 9; j++) {
-                currentRow.push(0);
+                currentRow.push({digit: 0, permanent: false});
             }
 
             result.push(currentRow);
@@ -24,10 +27,7 @@ export default class Board {
     }
   
     drawNumbers(): void {
-        let i = 0;
-        let j = 0;
-  
-        function nextPosition(i: number, j: number): Array<number> | null {
+        function nextPosition(i: number, j: number): [number, number] | null {
             if (j === 8 && i === 8) {
                 return null;
             } else if (j === 8) {
@@ -37,9 +37,9 @@ export default class Board {
             }
         }
   
-        function previousPosition(i: number, j: number): Array<number> {
+        function previousPosition(i: number, j: number): [number, number] {
             if (j === 0 && i === 0) {
-                throw "You're back to the beginning!";
+                throw "You're ALREADY at the beginning!";
             }
 
             if (j === 0) {
@@ -48,13 +48,16 @@ export default class Board {
                 return [i, j - 1];
             }
         }
-
+  
+        let i = 0;
+        let j = 0;
+  
         while (true) {
             let possibleCellNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
             shuffleArray(possibleCellNumbers);
 
             while (possibleCellNumbers.length) {
-                this.array[i][j] = possibleCellNumbers.pop()!;
+                this.array[i][j] = {digit: possibleCellNumbers.pop()!, permanent: true};
 
                 if (this.valid_cell(i, j, false))
                     break;
@@ -72,6 +75,8 @@ export default class Board {
                 [i, j] = upcomingPosition;
             }
         }
+
+        // TODO: ERASE SOME OF THE NUMBERS.
     }
 
     initialize(): void {
@@ -79,7 +84,7 @@ export default class Board {
         this.drawNumbers();
     }
 
-    constructor(array: Array<Array<number>> | undefined) {
+    constructor(array: CellInfo[][] | undefined) {
         if (array === undefined) {
             this.initialize();
         } else {
@@ -88,7 +93,7 @@ export default class Board {
     }
 
     writeCell(y: number, x: number, digit: number): Board {
-        const arrayCopy: Array<Array<number>> = this.array.map((row) => (row.map((digit) => digit)));
+        const arrayCopy: CellInfo[][] = this.array.map((row) => (row.map((cellInfo) => ({...cellInfo}))));
 
         if (!(0 <= y && y < 9 && 0 <= x && x < 9)) {
             throw "Cell position is invalid!";
@@ -97,13 +102,18 @@ export default class Board {
             throw "Digit for cell is invalid!";
         }
 
-        arrayCopy[y][x] = digit;
+        if (arrayCopy[y][x].permanent === true) {
+            throw "Attempting to write permanent cell!";
+        }
+
+        arrayCopy[y][x].digit = digit;
         return new Board(arrayCopy);
     }
 
     // Returns wether or not the number in the cell with coordinates
     // (y,x) is valid.
-    // (Yes, the y-axis comes first, and is the vertical axis)
+    // (Yes, the y-axis comes first, and is the vertical axis,
+    // and x is the horizontal axis, and comes second)
     //
     // `zeroValid` indicates to the method if a cell being empty
     // (the cell's value is 0) should be considered valid.
@@ -113,34 +123,34 @@ export default class Board {
     // highlighting all of the empty cells, which may be overwhelming.
     // (I can't remember the exact reason this was needed, though)
     valid_cell(y: number, x: number, zeroValid: boolean): boolean {
-        const cell_number = this.array[y][x];
+        const cell_digit: number = this.array[y][x].digit;
 
-        if (cell_number === 0 && zeroValid) {
+        if (cell_digit === 0 && zeroValid) {
             return true;
-        } else if (cell_number === 0 && !zeroValid) {
+        } else if (cell_digit === 0 && !zeroValid) {
             return false;
         }
 
         // check row
-        for (const [x_index, number] of this.array[y].entries()) {
-            if (x_index == x) {
+        for (const [x_index, cellInfo] of this.array[y].entries()) {
+            if (x_index === x) {
                 continue;
             }
 
-            if (number == cell_number) {
+            if (cellInfo.digit === cell_digit) {
                 return false;
             }
         }
 
         // check column
         for (let y_index = 0; y_index < 9; y_index++) {
-            const number = this.array[y_index][x];
+            const cell_info = this.array[y_index][x];
 
-            if (y_index == y) {
+            if (y_index === y) {
                 continue;
             }
 
-            if (number == cell_number) {
+            if (cell_info.digit === cell_digit) {
                 return false;
             }
         }
@@ -151,13 +161,13 @@ export default class Board {
 
         for (let y_index = y_square_start; y_index < y_square_start + 3; y_index++) {
             for (let x_index = x_square_start; x_index < x_square_start + 3; x_index++) {
-                if (y_index == y && x_index == x) {
+                if (y_index === y && x_index === x) {
                     continue;
                 }
-                
-                const number = this.array[y_index][x_index];
 
-                if (number == cell_number) {
+                const cell_info: CellInfo = this.array[y_index][x_index];
+
+                if (cell_info.digit === cell_digit) {
                     return false;
                 }
             }

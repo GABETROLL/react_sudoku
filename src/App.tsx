@@ -1,4 +1,4 @@
-import Board from './board';
+import Board, { CellInfo } from './board';
 import './App.css';
 import { ReactElement, useEffect, useState } from 'react';
 
@@ -21,7 +21,7 @@ function Cell({value, selected, select, showInvalid}:
 
 
 function App() {
-  const [array, setArray]: [number[][], any] = useState(Board.matrix());
+  const [array, setArray]: [CellInfo[][], any] = useState((new Board(undefined)).array);
   const [selectedCell, setSelectedCell]: [number[], any] = useState([0, 0]);
   const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
 
@@ -47,7 +47,18 @@ function App() {
         const eventKeyNumber: number = parseInt(event.key);
 
         if (Number.isInteger(eventKeyNumber) && eventKeyNumber >= 0 && eventKeyNumber <= 9) {
-          setArray(board.writeCell(selectedCell[0], selectedCell[1], eventKeyNumber).array);
+          let newBoard: Board;
+
+          try {
+            newBoard = board.writeCell(selectedCell[0], selectedCell[1], eventKeyNumber);
+          } catch (error) {
+            if (error !== "Attempting to write permanent cell!") {
+              console.log(error);
+            }
+            return;
+          }
+
+          setArray(newBoard.array);
           // return; <-------
         }
       }
@@ -67,11 +78,13 @@ function App() {
   for (const [y, row] of array.entries()) {
     const tableRow: Array<ReactElement> = [];
 
-    for (const [x, digit] of row.entries()) {
+    for (const [x, cellInfo] of row.entries()) {
+      // TODO: ADD PROP TO CELL TO INDICATE IF IT'S PERMANENT,
+      // AND MAKE `Cell` DISPLAY ITSELF AND FUNCTION AS SUCH.
       tableRow.push(
         <Cell
           key={`${y}${x}`}
-          value={digit}
+          value={cellInfo.digit}
           selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
           select={() => setSelectedCell([y, x])}
           showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
