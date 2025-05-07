@@ -32,15 +32,19 @@ function App() {
       function keyDownListener(event: KeyboardEvent) {
         if (event.key === "a" && selectedCell[1] > 0) {
           setSelectedCell([selectedCell[0], selectedCell[1] - 1]);
+          setShowingInvalidCells(false);
           return;
         } else if (event.key === "d" && selectedCell[1] < 8) {
           setSelectedCell([selectedCell[0], selectedCell[1] + 1]);
+          setShowingInvalidCells(false);
           return;
         } else if (event.key === "w" && selectedCell[0] > 0) {
           setSelectedCell([selectedCell[0] - 1, selectedCell[1]]);
+          setShowingInvalidCells(false);
           return;
         } else if (event.key === "s" && selectedCell[0] < 8) {
           setSelectedCell([selectedCell[0] + 1, selectedCell[1]]);
+          setShowingInvalidCells(false);
           return;
         }
 
@@ -59,6 +63,7 @@ function App() {
           }
 
           setArray(newBoard.array);
+          setShowingInvalidCells(false);
           // return; <-------
         }
       }
@@ -86,7 +91,7 @@ function App() {
           key={`${y}${x}`}
           value={cellInfo.digit}
           selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
-          select={() => setSelectedCell([y, x])}
+          select={() => { setSelectedCell([y, x]); setShowingInvalidCells(false); }}
           showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
         />
       );
