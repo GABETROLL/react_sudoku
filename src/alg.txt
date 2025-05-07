@@ -1,0 +1,54 @@
+Checking if cell is valid... board.ts:105:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Cell made it back to the beginning! board.ts:98:28
+Cell wasn't valid. Going back to previous position. board.ts:119:24
+2 8 board.ts:75:20
+Trying number: 5 8 board.ts:90:20
+Checking if cell is valid... board.ts:105:24
+Cell was valid! Going to next position. board.ts:124:20
+3 0 board.ts:75:20
+CELL WILL BE NEW board.ts:80:24
+Trying number: 5 5 board.ts:90:20
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Cell made it back to the beginning! board.ts:98:28
+Cell wasn't valid. Going back to previous position. board.ts:119:24
+2 8 board.ts:75:20
+Trying number: 5 8 board.ts:90:20
+Checking if cell is valid... board.ts:105:24
+Cell was valid! Going to next position. board.ts:124:20
+3 0 board.ts:75:20
+CELL WILL BE NEW board.ts:80:24
+Trying number: 7 7 board.ts:90:20
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell is valid... board.ts:105:24
+Cell wasn't valid. Making cell next digit. board.ts:110:24
+Checking if cell

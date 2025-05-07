@@ -21,7 +21,7 @@ function Cell({value, selected, select, showInvalid}:
 
 
 function App() {
-  const [array, setArray]: [CellInfo[][], any] = useState((new Board(undefined)).array);
+  const [array, setArray]: [CellInfo[][], any] = useState((Board.matrix()));
   const [selectedCell, setSelectedCell]: [number[], any] = useState([0, 0]);
   const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
 
@@ -102,6 +102,7 @@ function App() {
           {tableRows}
         </tbody>
       </table>
+      <button onClick={() => setArray((new Board(undefined)).array)}>Generate</button>
       <button onClick={() => setShowingInvalidCells(true)}>Submit</button>
     </>
   );

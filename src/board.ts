@@ -1,87 +1,151 @@
-import shuffleArray from './shuffleArray';
+import shuffleArray from "./shuffleArray";
 
 export type CellInfo = {digit: number, permanent: boolean};
+
+function boardMatrix<T>(ySize: number, xSize: number, default_: T) {
+    const result: T[][] = [];
+    for (let i = 0; i < ySize; i++) {
+        const row: T[] = [];
+
+        for (let j = 0; j < xSize; j++) {
+            row.push(default_);
+        }
+        result.push(row);
+    }
+    return result;
+}
 
 
 export default class Board {
     array: CellInfo[][] = [];
 
     static matrix(): CellInfo[][] {
-        const result: CellInfo[][] = [];
-
-        for (let i = 0; i < 9; i++) {
-            const currentRow: CellInfo[] = [];
-  
-            for (let j = 0; j < 9; j++) {
-                currentRow.push({digit: 0, permanent: false});
-            }
-
-            result.push(currentRow);
-        }
-  
-    return result;
+        return boardMatrix<CellInfo>(9, 9, {digit: 0, permanent: false});
     }
 
     static validNumber(x: number): boolean {
         return Number.isInteger(x) && 0 <= x && x <= 9;
     }
-  
-    drawNumbers(): void {
-        function nextPosition(i: number, j: number): [number, number] | null {
-            if (j === 8 && i === 8) {
-                return null;
-            } else if (j === 8) {
-                return [i + 1, 0];
-            } else {
-                return [i, j + 1];
-            }
-        }
-  
-        function previousPosition(i: number, j: number): [number, number] {
-            if (j === 0 && i === 0) {
-                throw "You're ALREADY at the beginning!";
-            }
 
-            if (j === 0) {
-                return [i - 1, 8];
-            } else {
-                return [i, j - 1];
-            }
+    static nextPosition(i: number, j: number): [number, number] | null {
+        if (j === 8 && i === 8) {
+            return null;
+        } else if (j === 8) {
+            return [i + 1, 0];
+        } else {
+            return [i, j + 1];
         }
-  
+    }
+
+    static previousPosition(i: number, j: number): [number, number] {
+        if (j === 0 && i === 0) {
+            throw "You're ALREADY at the beginning!";
+        }
+
+        if (j === 0) {
+            return [i - 1, 8];
+        } else {
+            return [i, j - 1];
+        }
+    }
+
+    static nextDigit(digit: number): number {
+        if (digit === 0) {
+            throw "Current digit must not already be 0!";
+        }
+
+        const possibleResult = (digit + 1) % 10;
+
+        if (possibleResult === 0) {
+            return possibleResult + 1;
+        }
+        return possibleResult;
+    }
+
+    drawNumbers(amountToErase: number): void {
+        // This is used lower in this method.
+        if (!Number.isInteger(amountToErase) || amountToErase < 0 || amountToErase > 81) {
+            throw "Amount of cells to erase is outside of the range of cells in board!";
+        }
+
         let i = 0;
         let j = 0;
-  
-        while (true) {
-            let possibleCellNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-            shuffleArray(possibleCellNumbers);
 
-            while (possibleCellNumbers.length) {
-                this.array[i][j] = {digit: possibleCellNumbers.pop()!, permanent: true};
+        const possibleCellNumbers: number[][][] = boardMatrix<number[]>(9, 9, []);
+
+        while (true) {
+            // console.log(i, j);
+
+            if (possibleCellNumbers[i][j].length === 0) {
+                console.log("CELL WILL BE NEW");
+
+                const cellNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                shuffleArray(cellNumbers);
+
+                possibleCellNumbers[i][j] = cellNumbers;
+            }
+            this.array[i][j] = {digit: possibleCellNumbers[i][j].pop()!, permanent: true};
+
+            // console.log(`Trying number: ${possibleCellNumbers[i][j]} ${this.array[i][j].digit}`);
+
+            let shouldGoBack: boolean = false;
+
+            while (true) {
+                // console.log("Checking if cell is valid...");
 
                 if (this.valid_cell(i, j, false))
                     break;
-            }
 
-            if (!this.valid_cell(i, j, false)) {
-                [i, j] = previousPosition(i, j);
-            } else {
-                let upcomingPosition = nextPosition(i, j);
-
-                if (upcomingPosition === null) {
+                if (possibleCellNumbers[i][j].length === 0) {
+                    console.log("Cell made it back to the beginning!");
+                    shouldGoBack = true;
                     break;
                 }
 
+                // console.log("Cell wasn't valid. Making cell next digit.");
+
+                this.array[i][j].digit = possibleCellNumbers[i][j].pop()!;
+            }
+
+            if (shouldGoBack) {
+                this.array[i][j].digit = 0;
+
+                while (possibleCellNumbers[i][j].length === 0) {
+                    // console.log(`Cell ${i} ${j} couldn't be any digit. Going back to previous position.`);
+                    try {
+                        [i, j] = Board.previousPosition(i, j);
+                    } catch (error) {
+                        if (error === "Already at the beginning!") {
+                            break;
+                        }
+                    }
+                }
+            } else {
+                // console.log("Found valid digit for cell! Going to next position.");
+
+                const upcomingPosition: [number, number] | null = Board.nextPosition(i, j);
+                if (upcomingPosition === null) {
+                    break;
+                }
+    
                 [i, j] = upcomingPosition;
             }
         }
 
-        // TODO: ERASE SOME OF THE NUMBERS.
+        // Erase some permanent digits, to allow the player to guess them.
+
+        for (let cell = 0; cell < amountToErase; cell++) {
+            i = Math.floor(Math.random() * 9);
+            j = Math.floor(Math.random() * 9);
+
+            this.array[i][j].digit = 0;
+            this.array[i][j].permanent = false;
+        }
     }
 
     initialize(): void {
         this.array = Board.matrix();
-        this.drawNumbers();
+        this.drawNumbers(81 >> 1);
     }
 
     constructor(array: CellInfo[][] | undefined) {
