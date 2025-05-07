@@ -28,6 +28,14 @@
   font-size: 1rem;
 }
 
+.permanent {
+  color: black;
+}
+
+.temporary {
+  color: #404040;
+}
+
 .selected {
   background-color: #8080FF;
 }

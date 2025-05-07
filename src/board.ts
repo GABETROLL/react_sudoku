@@ -138,8 +138,7 @@ export default class Board {
             i = Math.floor(Math.random() * 9);
             j = Math.floor(Math.random() * 9);
 
-            this.array[i][j].digit = 0;
-            this.array[i][j].permanent = false;
+            this.array[i][j] = {digit: 0, permanent: false};
         }
     }
 

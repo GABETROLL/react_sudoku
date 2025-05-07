@@ -3,12 +3,18 @@ import './App.css';
 import { ReactElement, useEffect, useState } from 'react';
 
 
-function Cell({value, selected, select, showInvalid}:
-    {value: number, selected: boolean, select: any, showInvalid: boolean}
+function Cell({value, permanent, selected, select, showInvalid}:
+    {value: number, permanent: boolean, selected: boolean, select: any, showInvalid: boolean}
   ) {
   let className = "cell";
   if (selected) className += " selected";
   if (showInvalid) className += " invalid";
+
+  if (permanent) {
+    className += " permanent";
+  } else {
+    className += " temporary";
+  }
 
   return (
     <td className={className} onClick={select}>
@@ -90,6 +96,7 @@ function App() {
         <Cell
           key={`${y}${x}`}
           value={cellInfo.digit}
+          permanent={cellInfo.permanent}
           selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
           select={() => { setSelectedCell([y, x]); setShowingInvalidCells(false); }}
           showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
@@ -100,6 +107,7 @@ function App() {
     tableRows.push(<tr key={`${y}`}>{tableRow}</tr>);
   }
 
+  // TODO: LET THE PLAYER KNOW THEY'VE WON
   return (
     <>
       <table className="board">
