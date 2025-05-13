@@ -1,5 +1,5 @@
 import Board, { CellInfo } from './board';
-import './App.css';
+import './Game.css';
 import { ReactElement, useEffect, useState } from 'react';
 
 
@@ -26,12 +26,20 @@ function Cell({value, permanent, selected, select, showInvalid}:
 }
 
 
-function App() {
+function Game({victory}: {victory: () => void}) {
   const [array, setArray]: [CellInfo[][], any] = useState((Board.matrix()));
   const [selectedCell, setSelectedCell]: [number[], any] = useState([0, 0]);
   const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
 
   const board = new Board(array);
+
+  function submitBoard() {
+    if (board.playerWins()) {
+      victory();
+    } else {
+      setShowingInvalidCells(true);
+    }
+  }
 
   useEffect(
     () => {
@@ -116,9 +124,9 @@ function App() {
         </tbody>
       </table>
       <button onClick={() => setArray((new Board(undefined)).array)}>Generate</button>
-      <button onClick={() => setShowingInvalidCells(true)}>Submit</button>
+      <button onClick={() => submitBoard()}>Submit</button>
     </>
   );
 }
 
-export default App;
+export default Game;

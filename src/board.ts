@@ -238,4 +238,23 @@ export default class Board {
 
         return true;
     }
+
+    /**
+     * Returns wether or not every cell in the board is valid,
+     * AND ISN'T EMPTY. This means the player has won.
+     *
+     * Goes through every cell (y, x) and calls `this.validCell(y, x, false)`.
+     * Calls `this.validCell` with `zeroValid` as false, since the player
+     * needs to fill all cells to win the game.
+     */
+    playerWins(): boolean {
+        for (let y = 0; y < 9; y++) {
+            for (let x = 0; x < 9; x++) {
+                if (!this.valid_cell(y, x, false)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
