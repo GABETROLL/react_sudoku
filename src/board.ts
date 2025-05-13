@@ -2,6 +2,7 @@ import shuffleArray from "./shuffleArray";
 
 export type CellInfo = {digit: number, permanent: boolean};
 
+
 function boardMatrix<T>(ySize: number, xSize: number, default_: T) {
   const result: T[][] = [];
   for (let i = 0; i < ySize; i++) {
@@ -13,6 +14,13 @@ function boardMatrix<T>(ySize: number, xSize: number, default_: T) {
     result.push(row);
   }
   return result;
+}
+
+
+export enum Difficulty {
+  easy = 1,
+  medium,
+  hard
 }
 
 
@@ -65,7 +73,7 @@ export default class Board {
   drawNumbers(amountToErase: number): void {
     // This is used lower in this method.
     if (!Number.isInteger(amountToErase) || amountToErase < 0 || amountToErase > 81) {
-      throw "Amount of cells to erase is outside of the range of cells in board!";
+      throw `Amount of cells to erase is invalid! Got: ${amountToErase}`;
     }
 
     let i = 0;
@@ -143,14 +151,30 @@ export default class Board {
     }
   }
 
-  initialize(): void {
+  initialize(difficulty: Difficulty): void {
     this.array = Board.matrix();
-    this.drawNumbers(81 >> 1);
+
+    //      00
+    //      09
+    // 3 -> 18
+    //      27
+    //      36
+    // 2 -> 40.5
+    //      45
+    //      54
+    // 1 -> 63
+    //      72
+    //      81
+
+    const amountToErase = Math.floor(difficulty * (-22.5) + 85.5);
+    console.log(amountToErase);
+
+    this.drawNumbers(amountToErase);
   }
 
-  constructor(array: CellInfo[][] | undefined) {
+  constructor(array?: CellInfo[][], difficulty: Difficulty = Difficulty.easy) {
     if (array === undefined) {
-      this.initialize();
+      this.initialize(difficulty);
     } else {
       this.array = array;
     }

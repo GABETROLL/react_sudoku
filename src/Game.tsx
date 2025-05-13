@@ -1,4 +1,4 @@
-import Board, { CellInfo } from './board';
+import Board, { CellInfo, Difficulty } from './board';
 import './Game.css';
 import { ReactElement, useEffect, useState } from 'react';
 
@@ -26,8 +26,8 @@ function Cell({value, permanent, selected, select, showInvalid}:
 }
 
 
-function Game({victory}: {victory: () => void}) {
-  const [array, setArray]: [CellInfo[][], any] = useState((Board.matrix()));
+function Game({difficulty, victory}: {difficulty: Difficulty, victory: () => void}) {
+  const [array, setArray]: [CellInfo[][], any] = useState(new Board(undefined, difficulty).array);
   const [selectedCell, setSelectedCell]: [number[], any] = useState([0, 0]);
   const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
 
@@ -123,7 +123,6 @@ function Game({victory}: {victory: () => void}) {
           {tableRows}
         </tbody>
       </table>
-      <button onClick={() => setArray((new Board(undefined)).array)}>Generate</button>
       <button onClick={() => submitBoard()}>Submit</button>
     </>
   );

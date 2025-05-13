@@ -1,19 +1,31 @@
 import { useState } from "react";
 import Game from "./Game";
+import { Difficulty } from "./board";
+import "./menu.css";
+
+type GameInfo = {
+  gameStarted: boolean, difficulty: Difficulty
+};
 
 
 export default function Menu() {
-  const [gameStarted, setGameStarted] = useState(false);
+  const [gameInfo, setGameInfo] = useState<GameInfo>({
+    gameStarted: false, difficulty: Difficulty.easy
+  });
 
-  if (gameStarted) {
-    return <Game victory={() => setGameStarted(false)} />;
+  if (gameInfo.gameStarted) {
+    return <Game
+      difficulty={gameInfo.difficulty}
+      victory={() => setGameInfo({gameStarted: false, difficulty: Difficulty.easy})}
+    />;
   }
 
   return (
-    <div id="menu">
+    <div className="menu">
       <h2>Difficulty</h2>
-      <input type="number" />
-      <button onClick={() => setGameStarted(true)}></button>
+      <button onClick={() => setGameInfo({gameStarted: true, difficulty: Difficulty.easy})}>Easy</button>
+      <button onClick={() => setGameInfo({gameStarted: true, difficulty: Difficulty.medium})}>Medium</button>
+      <button onClick={() => setGameInfo({gameStarted: true, difficulty: Difficulty.hard})}>Hard</button>
     </div>
   );
 }
