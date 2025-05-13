@@ -20,12 +20,24 @@
 }
 
 .cell {
-  border-width: 10px;
+  border-width: 1px;
   border-color: black;
   border-style: solid;
 
   flex-grow: 1;
   font-size: 1rem;
+}
+.cell:nth-child(3n - 2) {
+  border-left-width: 10px;
+}
+.cell:nth-child(9) {
+  border-right-width: 10px;
+}
+tr:nth-child(3n - 2) > .cell {
+  border-top-width: 10px;
+}
+tr:nth-child(9) > .cell {
+  border-bottom-width: 10px;
 }
 
 .permanent {
