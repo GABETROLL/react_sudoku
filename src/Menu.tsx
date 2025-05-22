@@ -1,31 +1,50 @@
 import { useState } from "react";
 import Game from "./Game";
-import { Difficulty } from "./board";
+import Victory from "./Victory";
+import Board, { Difficulty, CellInfo } from "./board";
 import "./menu.css";
 
+enum GameStages {
+  notYetStarted,
+  started,
+  won,
+}
+
+
 type GameInfo = {
-  gameStarted: boolean, difficulty: Difficulty
+  gameStage: GameStages,
+  difficulty: Difficulty,
+  array: CellInfo[][],
+  gameTimeMilliseconds: number,
 };
 
 
 export default function Menu() {
-  const [gameInfo, setGameInfo] = useState<GameInfo>({
-    gameStarted: false, difficulty: Difficulty.easy
-  });
+  const initialState = {
+    gameStage: GameStages.notYetStarted,
+    difficulty: Difficulty.easy,
+    array: Board.matrix(),
+    gameTimeMilliseconds: 0,
+  };
 
-  if (gameInfo.gameStarted) {
+  const [gameInfo, setGameInfo] = useState<GameInfo>(initialState);
+
+  if (gameInfo.gameStage === GameStages.notYetStarted) {
+    return (
+      <div className="menu">
+        <h2>Difficulty</h2>
+        <button onClick={() => setGameInfo({...gameInfo, gameStage: GameStages.started, difficulty: Difficulty.easy})}>Easy</button>
+        <button onClick={() => setGameInfo({...gameInfo, gameStage: GameStages.started, difficulty: Difficulty.medium})}>Medium</button>
+        <button onClick={() => setGameInfo({...gameInfo, gameStage: GameStages.started, difficulty: Difficulty.hard})}>Hard</button>
+      </div>
+    );
+  } else if (gameInfo.gameStage === GameStages.started) {
     return <Game
       difficulty={gameInfo.difficulty}
-      victory={() => setGameInfo({gameStarted: false, difficulty: Difficulty.easy})}
+      victory={(array) => setGameInfo({...gameInfo, gameStage: GameStages.won, array: array})}
+      updateStopwatch={(timeElapsed) => setGameInfo({...gameInfo, gameTimeMilliseconds: gameInfo.gameTimeMilliseconds + timeElapsed})}
     />;
+  } else {
+    return <Victory array={gameInfo.array} time={gameInfo.gameTimeMilliseconds} goBackHome={() => setGameInfo(initialState)} />
   }
-
-  return (
-    <div className="menu">
-      <h2>Difficulty</h2>
-      <button onClick={() => setGameInfo({gameStarted: true, difficulty: Difficulty.easy})}>Easy</button>
-      <button onClick={() => setGameInfo({gameStarted: true, difficulty: Difficulty.medium})}>Medium</button>
-      <button onClick={() => setGameInfo({gameStarted: true, difficulty: Difficulty.hard})}>Hard</button>
-    </div>
-  );
 }

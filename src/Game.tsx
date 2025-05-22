@@ -1,41 +1,22 @@
 import Board, { CellInfo, Difficulty } from './board';
 import './Game.css';
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import BoardComponent from './BoardComponent';
 
 
-function Cell({value, permanent, selected, select, showInvalid}:
-    {value: number, permanent: boolean, selected: boolean, select: any, showInvalid: boolean}
-  ) {
-  let className = "cell";
-  if (selected) className += " selected";
-  if (showInvalid) className += " invalid";
-
-  if (permanent) {
-    className += " permanent";
-  } else {
-    className += " temporary";
-  }
-
-  return (
-    <td className={className} onClick={select}>
-      <p>
-        {Board.validNumber(value) && value > 0 ? value.toString() : ''}
-      </p>
-    </td>
-  );
-}
-
-
-function Game({difficulty, victory}: {difficulty: Difficulty, victory: () => void}) {
+export default function Game(
+  {difficulty, victory, updateStopwatch}
+  : {difficulty: Difficulty, victory: (array: CellInfo[][]) => void, updateStopwatch: (timeElapsed: number) => void}
+) {
   const [array, setArray]: [CellInfo[][], any] = useState(new Board(undefined, difficulty).array);
-  const [selectedCell, setSelectedCell]: [number[], any] = useState([0, 0]);
+  const [selectedCell, setSelectedCell]: [[number, number], any] = useState([0, 0]);
   const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
 
   const board = new Board(array);
 
   function submitBoard() {
     if (board.playerWins()) {
-      victory();
+      victory(array);
     } else {
       setShowingInvalidCells(true);
     }
@@ -92,40 +73,28 @@ function Game({difficulty, victory}: {difficulty: Difficulty, victory: () => voi
     },
   );
 
-  const tableRows: Array<ReactElement> = [];
-
-  for (const [y, row] of array.entries()) {
-    const tableRow: Array<ReactElement> = [];
-
-    for (const [x, cellInfo] of row.entries()) {
-      // TODO: ADD PROP TO CELL TO INDICATE IF IT'S PERMANENT,
-      // AND MAKE `Cell` DISPLAY ITSELF AND FUNCTION AS SUCH.
-      tableRow.push(
-        <Cell
-          key={`${y}${x}`}
-          value={cellInfo.digit}
-          permanent={cellInfo.permanent}
-          selected={selectedCell !== null && selectedCell[0] === y && selectedCell[1] === x}
-          select={() => { setSelectedCell([y, x]); setShowingInvalidCells(false); }}
-          showInvalid={showingInvalidCells && !(board.valid_cell(y, x, false))}
-        />
+  useEffect(
+    () => {
+      const intervalId = setInterval(
+        () => {
+          updateStopwatch(250);
+        },
+        250,
       );
-    }
 
-    tableRows.push(<tr key={`${y}`}>{tableRow}</tr>);
-  }
+      return () => clearInterval(intervalId);
+    }
+  );
 
   // TODO: LET THE PLAYER KNOW THEY'VE WON
   return (
     <>
-      <table className="board">
-        <tbody className="boardBody">
-          {tableRows}
-        </tbody>
-      </table>
-      <button onClick={() => submitBoard()}>Submit</button>
+      <BoardComponent
+        array={array}
+        selectedCell={selectedCell} setSelectedCell={setSelectedCell}
+        showingInvalidCells={showingInvalidCells} setShowingInvalidCells={setShowingInvalidCells}
+      />
+      <button onClick={submitBoard}>Submit</button>
     </>
   );
 }
-
-export default Game;
