@@ -45,6 +45,6 @@ export default function Menu() {
       updateStopwatch={(timeElapsed) => setGameInfo({...gameInfo, gameTimeMilliseconds: gameInfo.gameTimeMilliseconds + timeElapsed})}
     />;
   } else {
-    return <Victory array={gameInfo.array} time={gameInfo.gameTimeMilliseconds} goBackHome={() => setGameInfo(initialState)} />
+    return <Victory array={gameInfo.array} time={gameInfo.gameTimeMilliseconds} playAgain={() => setGameInfo({...initialState, gameStage: GameStages.started, difficulty: gameInfo.difficulty})} goBackHome={() => setGameInfo(initialState)} />
   }
 }

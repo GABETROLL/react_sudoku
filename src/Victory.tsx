@@ -3,8 +3,8 @@ import BoardComponent from "./BoardComponent";
 
 
 export default function Victory(
-  {array, time, goBackHome}
-  : {array: CellInfo[][], time: number, goBackHome: () => void}
+  {array, time, playAgain, goBackHome}
+  : {array: CellInfo[][], time: number, playAgain: () => void, goBackHome: () => void}
 ) {
   function formatTime(time: number): string {
     let result: string = "";
@@ -50,7 +50,7 @@ export default function Victory(
       </div>
       <div className="h-flex">
         <div className="v-flex">
-          <button>Play again</button>
+          <button onClick={playAgain}>Play again</button>
           <button onClick={goBackHome}>Go to Home</button>
         </div>
         <div>
