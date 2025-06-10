@@ -4,6 +4,7 @@
 }
 
 .board {
+  background-color: white;
   display: flex;
   flex-direction: column;
 }
@@ -20,6 +21,9 @@
 }
 
 .cell {
+  font-size: 2em;
+
+  text-align: center;
   border-width: 1px;
   border-color: black;
   border-style: solid;
@@ -45,11 +49,11 @@ tr:nth-child(9) > .cell {
 }
 
 .temporary {
-  color: #404040;
+  color: #606060;
 }
 
 .selected {
-  background-color: #8080FF;
+  background-color: var(--primary-color);
 }
 
 .invalid {
