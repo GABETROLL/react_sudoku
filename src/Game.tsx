@@ -87,13 +87,13 @@ export default function Game(
   );
 
   return (
-    <>
+    <div className="game">
       <BoardComponent
         array={array}
         selectedCell={selectedCell} setSelectedCell={setSelectedCell}
         showingInvalidCells={showingInvalidCells} setShowingInvalidCells={setShowingInvalidCells}
       />
       <button onClick={submitBoard}>Submit</button>
-    </>
+    </div>
   );
 }
