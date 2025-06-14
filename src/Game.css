@@ -6,6 +6,7 @@
 .board {
   width: 18em;
   height: 18em;
+
   background-color: white;
 
   display: flex;

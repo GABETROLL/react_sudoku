@@ -28,7 +28,8 @@ a:hover {
   --primary-color: #2596ff;
   --bright-color: #FFFFFF;
 
-  font-size: calc(50vmin / 9);
+  /* So that the board fits in the screen */
+  font-size: calc(100vmin * 2 / 3 / 18);
 }
 
 body {
@@ -42,13 +43,17 @@ body {
   color: var(--primary-color);
 }
 
-h2 {
+h1 {
   font-size: 3em;
+}
+
+h2 {
+  font-size: 2em;
   line-height: 1.1;
 }
 
 button {
-  font-size: 2rem;
+  font-size: 1rem;
   padding: 1rem 4rem;
   color: var(--bright-color);
   text-decoration: none;

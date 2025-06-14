@@ -1,5 +1,6 @@
 import { CellInfo } from "./board";
 import BoardComponent from "./BoardComponent";
+import "./victory.css";
 
 
 export default function Victory(
@@ -33,7 +34,7 @@ export default function Victory(
   const timeTextString: string = formatTime(time);
 
   return (
-    <>
+    <div className="victory">
       <div className="h-flex">
         <BoardComponent
           array={array}
@@ -59,6 +60,6 @@ export default function Victory(
           <button>Submit</button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,0 +1,13 @@
+.victory .board {
+  font-size: calc(100vmin / 2 / 18);
+}
+
+.h-flex {
+	display: flex;
+	align-items: center;
+}
+
+.v-flex {
+	display: flex;
+	flex-direction: column;
+}
