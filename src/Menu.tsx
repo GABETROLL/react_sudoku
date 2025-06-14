@@ -41,8 +41,7 @@ export default function Menu() {
   } else if (gameInfo.gameStage === GameStages.started) {
     return <Game
       difficulty={gameInfo.difficulty}
-      victory={(array) => setGameInfo({...gameInfo, gameStage: GameStages.won, array: array})}
-      updateStopwatch={(timeElapsed) => setGameInfo({...gameInfo, gameTimeMilliseconds: gameInfo.gameTimeMilliseconds + timeElapsed})}
+      victory={(array, gameTimeMilliseconds) => setGameInfo({...gameInfo, gameStage: GameStages.won, array, gameTimeMilliseconds})}
     />;
   } else {
     return <Victory array={gameInfo.array} time={gameInfo.gameTimeMilliseconds} playAgain={() => setGameInfo({...initialState, gameStage: GameStages.started, difficulty: gameInfo.difficulty})} goBackHome={() => setGameInfo(initialState)} />

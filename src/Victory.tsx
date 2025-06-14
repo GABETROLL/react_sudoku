@@ -1,5 +1,6 @@
 import { CellInfo } from "./board";
 import BoardComponent from "./BoardComponent";
+import formatTime from "./formatTime";
 import "./victory.css";
 
 
@@ -7,30 +8,6 @@ export default function Victory(
   {array, time, playAgain, goBackHome}
   : {array: CellInfo[][], time: number, playAgain: () => void, goBackHome: () => void}
 ) {
-  function formatTime(time: number): string {
-    let result: string = "";
-
-    const millisecondsInASecond = 1000;
-    const millisecondsInAMinute = millisecondsInASecond * 60;
-    const millisecondsInAnHour = millisecondsInAMinute * 60;
-
-    const hours: number = Math.floor(time / millisecondsInAnHour);
-    time %= millisecondsInAnHour;
-
-    result = hours.toString().concat(" hours");
-
-    const minutes: number = Math.floor(time / millisecondsInAMinute);
-    time %= millisecondsInAMinute;
-
-    result = result.concat(" ", minutes.toString(), " minutes");
-
-    const seconds: number = time / millisecondsInASecond;
-
-    result = result.concat(" ", seconds.toString(), " seconds");
-
-    return result;
-  }
-
   const timeTextString: string = formatTime(time);
 
   return (

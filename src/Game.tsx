@@ -2,21 +2,22 @@ import Board, { CellInfo, Difficulty } from './board';
 import './Game.css';
 import { useEffect, useState } from 'react';
 import BoardComponent from './BoardComponent';
-
+import formatTime from './formatTime';
 
 export default function Game(
-  {difficulty, victory, updateStopwatch}
-  : {difficulty: Difficulty, victory: (array: CellInfo[][]) => void, updateStopwatch: (timeElapsed: number) => void}
+  {difficulty, victory}
+  : {difficulty: Difficulty, victory: (array: CellInfo[][], gameTimeMilliseconds: number) => void}
 ) {
   const [array, setArray]: [CellInfo[][], any] = useState(new Board(undefined, difficulty).array);
   const [selectedCell, setSelectedCell]: [[number, number], any] = useState([0, 0]);
   const [showingInvalidCells, setShowingInvalidCells]: [boolean, any] = useState(false);
+  const [gameTimeMilliseconds, setGameTimeMilliseconds]: [number, any] = useState(0);
 
   const board = new Board(array);
 
   function submitBoard() {
     if (board.playerWins()) {
-      victory(array);
+      victory(array, gameTimeMilliseconds);
     } else {
       setShowingInvalidCells(true);
     }
@@ -75,11 +76,13 @@ export default function Game(
 
   useEffect(
     () => {
+      const refreshTime = 250;
+
       const intervalId = setInterval(
         () => {
-          updateStopwatch(250);
+          setGameTimeMilliseconds(gameTimeMilliseconds + refreshTime);
         },
-        250,
+        refreshTime,
       );
 
       return () => clearInterval(intervalId);
@@ -93,6 +96,7 @@ export default function Game(
         selectedCell={selectedCell} setSelectedCell={setSelectedCell}
         showingInvalidCells={showingInvalidCells} setShowingInvalidCells={setShowingInvalidCells}
       />
+      <p>Time: {formatTime(gameTimeMilliseconds)}</p>
       <button onClick={submitBoard}>Submit</button>
     </div>
   );
