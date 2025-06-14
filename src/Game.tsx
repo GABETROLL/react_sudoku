@@ -86,7 +86,6 @@ export default function Game(
     }
   );
 
-  // TODO: LET THE PLAYER KNOW THEY'VE WON
   return (
     <>
       <BoardComponent

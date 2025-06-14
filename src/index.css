@@ -27,6 +27,8 @@ a:hover {
   --base-color: #202020;
   --primary-color: #2596ff;
   --bright-color: #FFFFFF;
+
+  font-size: calc(50vmin / 9);
 }
 
 body {

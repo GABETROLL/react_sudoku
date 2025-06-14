@@ -4,32 +4,32 @@
 }
 
 .board {
+  width: 18em;
+  height: 18em;
   background-color: white;
+
   display: flex;
-  flex-direction: column;
 }
 
 .boardBody {
+  flex: auto;
+
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .boardBody > tr {
+  flex: auto;
   display: flex;
-  justify-content: space-between;
 }
 
 .cell {
-  font-size: 2em;
-
   text-align: center;
   border-width: 1px;
   border-color: black;
   border-style: solid;
 
-  flex-grow: 1;
-  font-size: 1rem;
+  flex: auto;
 }
 .cell:nth-child(3n - 2) {
   border-left-width: 10px;
@@ -42,6 +42,10 @@ tr:nth-child(3n - 2) > .cell {
 }
 tr:nth-child(9) > .cell {
   border-bottom-width: 10px;
+}
+
+.cell > p {
+  margin: 0;
 }
 
 .permanent {

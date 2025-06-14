@@ -18,7 +18,7 @@ function Cell({value, permanent, selected, select, showInvalid}:
   return (
     <td className={className} onClick={select}>
       <p>
-        {Board.validNumber(value) && value > 0 ? value.toString() : ''}
+        {Board.validNumber(value) ? value.toString() : '0'}
       </p>
     </td>
   );
@@ -52,8 +52,6 @@ export default function BoardComponent(
       const tableRow: Array<ReactElement> = [];
   
       for (const [x, cellInfo] of row.entries()) {
-        // TODO: ADD PROP TO CELL TO INDICATE IF IT'S PERMANENT,
-        // AND MAKE `Cell` DISPLAY ITSELF AND FUNCTION AS SUCH.
         tableRow.push(
           <Cell
             key={`${y}${x}`}
