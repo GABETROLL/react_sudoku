@@ -18,7 +18,7 @@ function Cell({value, permanent, selected, select, showInvalid}:
   return (
     <td className={className} onClick={select}>
       <p>
-        {Board.validNumber(value) ? value.toString() : '0'}
+        {Board.validNumber(value) && value !== 0 ? value.toString() : ''}
       </p>
     </td>
   );
@@ -32,7 +32,7 @@ function Cell({value, permanent, selected, select, showInvalid}:
  * and so that the user can select a cell by clicking it. (THIS COMPONENT DOES NOT
  * MANAGE THE KEYBOARD TO MOVE THE PLAYER FROM ONE CELL TO ANOTHER, NOR DOES THIS COMPONENT
  * HAVE STATE. THE STATE FOR WHICH CELL IS SELECTED MUST BE KEPT OUTSIDE THIS COMPONENT).
- * The props `showingInvalidCells` can be used
+ * The props `showingInvalidCells` and `setShowingInvalidCells` can be used
  * so that this component renders all the invalid cells in the board as wrong
  * (with red background) if true, and to change wether or not the wrong cells are
  * being highlighted.
