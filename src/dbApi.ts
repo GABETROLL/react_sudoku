@@ -59,10 +59,35 @@ async function startGame(playerId: string, sessionId: string, difficulty: Diffic
 		return new Response(`Error making startGame fetch request: ${error}`, {status: 500});
 	}
 }
+
 /**
- * Ends the game with `sessionId` in the backend, which would make the backend store and
+ * Quits the game with `sessionId` and `gameSessionId` UNSUCCESSFULLY in the backend,
+ * which deletes the corresponding current game session, and DOESN'T add this
+ * game to the Games table, because all of those games were successful games.
+ *
+ * @param {string} playerId - The ID of the player that started this game session
+ * @param {string} sessionId - The sessionId given to the player when they logged in
+ * The player MUST be logged in, and must own this game to perform this request successfully!
+ * @param {string} gameSessionId - The ID of this game, the game the player is trying to quit.
+ * @returns {Promise<Response>} - The server's response. If an error occurs with the request itself,
+ * the result will be a `Response` object who's body contains the error in a message, and a status code
+ * of 500.
+ */
+async function quitGame(playerId: string, sessionId: string, gameSessionId: string): Promise<Response> {
+	try {
+		return await fetch(`${serverUrl}/games/${gameSessionId}`, {
+			method: "DELETE",
+			body: JSON.stringify({ userId: playerId, sessionId, gameSessionId }),
+		});
+	} catch (error) {
+		return new Response(`Error making quitGame fetch request: ${error}`, {status: 500});
+	}
+}
+
+/**
+ * Ends the game with `gameSessionId` and `sessionId` SUCCESSFULLY in the backend, which would make the backend store and
  * remember the game's results (the time it took the player to beat the game,
- * and the difficulty the game was).
+ * and the difficulty the game was), and forget the corresponding current game session.
  *
  * @param {string} playerId - The ID of the player in the DB.
  * @param {string} sessionId - The ID of the LOGIN SESSION of the player. This ID is obtained from the `login` API.
@@ -73,7 +98,7 @@ async function startGame(playerId: string, sessionId: string, difficulty: Diffic
  */
 async function endGame(playerId: string, sessionId: string, gameSessionId: string): Promise<Response> {
 	try {
-		return await fetch(`${serverUrl}/games/${sessionId}`, {
+		return await fetch(`${serverUrl}/games/${gameSessionId}`, {
 			method: "PUT",
 			body: JSON.stringify({ userId: playerId, sessionId, gameSessionId}),
 		});
