@@ -12,7 +12,7 @@ const serverUrl = "http://54.152.38.239";
  * @returns {Promise<Response>} The server's response, as a `Response` instance.
  * It SHOULD contain an ID for this player's login session, and the player's ID.
  */
-async function login(name: string, email: string, password: string): Promise<Response> {
+export async function login(name: string, email: string, password: string): Promise<Response> {
 	try {
 		return await fetch(`${serverUrl}/login`, {
 			method: "POST",
@@ -23,7 +23,7 @@ async function login(name: string, email: string, password: string): Promise<Res
 	}
 }
 
-async function logout(playerId: string, sessionId: string): Promise<Response> {
+export async function logout(playerId: string, sessionId: string): Promise<Response> {
 	try {
 		return await fetch(`${serverUrl}/login`, {
 			method: "DELETE",
@@ -49,7 +49,7 @@ async function logout(playerId: string, sessionId: string): Promise<Response> {
  * the result will be a `Response` object who's body contains the error in a message, and a status code
  * of 500.
  */
-async function startGame(playerId: string, sessionId: string, difficulty: Difficulty): Promise<Response> {
+export async function startGame(playerId: string, sessionId: string, difficulty: Difficulty): Promise<Response> {
 	try {
 		return await fetch(`${serverUrl}/games`, {
 			method: "POST",
@@ -73,7 +73,7 @@ async function startGame(playerId: string, sessionId: string, difficulty: Diffic
  * the result will be a `Response` object who's body contains the error in a message, and a status code
  * of 500.
  */
-async function quitGame(playerId: string, sessionId: string, gameSessionId: string): Promise<Response> {
+export async function quitGame(playerId: string, sessionId: string, gameSessionId: string): Promise<Response> {
 	try {
 		return await fetch(`${serverUrl}/games/${gameSessionId}`, {
 			method: "DELETE",
@@ -96,7 +96,7 @@ async function quitGame(playerId: string, sessionId: string, gameSessionId: stri
  * the result will be a `Response` object who's body contains the error in a message, and a status code
  * of 500.
  */
-async function endGame(playerId: string, sessionId: string, gameSessionId: string): Promise<Response> {
+export async function endGame(playerId: string, sessionId: string, gameSessionId: string): Promise<Response> {
 	try {
 		return await fetch(`${serverUrl}/games/${gameSessionId}`, {
 			method: "PUT",

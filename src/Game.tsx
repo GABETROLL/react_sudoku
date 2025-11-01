@@ -6,7 +6,7 @@ import formatTime from './formatTime';
 
 export default function Game(
   {difficulty, victory}
-  : {difficulty: Difficulty, victory: (array: CellInfo[][], gameTimeMilliseconds: number) => void}
+  : {difficulty: Difficulty, victory: (array: CellInfo[][]) => void}
 ) {
   const [array, setArray]: [CellInfo[][], any] = useState(new Board(undefined, difficulty).array);
   const [selectedCell, setSelectedCell]: [[number, number], any] = useState([0, 0]);
@@ -17,7 +17,7 @@ export default function Game(
 
   function submitBoard() {
     if (board.playerWins()) {
-      victory(array, gameTimeMilliseconds);
+      victory(array);
     } else {
       setShowingInvalidCells(true);
     }
