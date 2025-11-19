@@ -5,10 +5,12 @@ import "./victory.css";
 
 
 export default function Victory(
-  {array, time, playAgain, goBackHome}
-  : {array: CellInfo[][], time: number, playAgain: () => void, goBackHome: () => void}
+  {array, time, gameId, playAgain, goBackHome}
+  : {array: CellInfo[][], time: number, gameId: string, playAgain: () => void, goBackHome: () => void}
 ) {
   const timeTextString: string = formatTime(time);
+
+  // TODO: FIX VULNERABLITY IN GAME ID LINK.
 
   return (
     <div className="victory">
@@ -32,9 +34,7 @@ export default function Victory(
           <button onClick={goBackHome}>Go to Home</button>
         </div>
         <div>
-          <h3>Submit your scores:</h3>
-          <input type="text" placeholder="Your name" />
-          <button>Submit</button>
+          <p>Game id: <a href={`/games/${gameId}`}>gameId</a></p>
         </div>
       </div>
     </div>
