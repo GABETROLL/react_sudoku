@@ -2,7 +2,7 @@ import { useState } from "react";
 import Game from "./Game";
 import Victory from "./Victory";
 import Board, { Difficulty, CellInfo } from "./board";
-import { startGame, endGame } from "./dbApi";
+import { startGame, endGame } from "./api";
 import "./menu.css";
 
 enum GameStages {
@@ -107,6 +107,7 @@ export default function Menu() {
     return <Victory
       array={gameInfo.array}
       time={gameInfo.gameTimeMilliseconds}
+      gameId={gameInfo.gameSessionId}
       playAgain={() => innerStartGame(gameInfo.difficulty)}
       goBackHome={() => setGameInfo(initialState)}
     />

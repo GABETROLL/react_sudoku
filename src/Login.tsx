@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login } from "./dbApi";
+import { login } from "./api";
 
 
 type LoginFormState = {
