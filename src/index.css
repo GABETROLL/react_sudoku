@@ -32,6 +32,10 @@ a:hover {
   font-size: calc(100vmin * 2 / 3 / 18);
 }
 
+* {
+  margin: 0;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -41,6 +45,11 @@ body {
 
   background-color: var(--base-color);
   color: var(--primary-color);
+}
+
+header {
+  background-color: var(--primary-color);
+  color: var(--bright-color);
 }
 
 h1 {
@@ -60,8 +69,22 @@ button {
   background-color: var(--primary-color);
 }
 
-/*
+form {
+  display: flex;
+  flex-direction: column;
 
+  max-width: 600px;
+  margin: auto;
+
+  text-align: center;
+}
+
+input {
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+/*
 button {
   border-radius: 8px;
   border: 1px solid transparent;

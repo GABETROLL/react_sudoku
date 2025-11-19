@@ -68,11 +68,19 @@ export default function Login({failed, succeeded}: {failed: () => void, succeede
     const [loginState, setLoginState]: [LoginFormState, (state: LoginFormState) => void] = useState({name: '', email: '', password: ''});
 
     return (
-        <form>
-            <input id="name" type="name" value={loginState.name} onChange={() => onChange(setLoginState)} />
-            <input id="email" type="email" value={loginState.email} onChange={() => onChange(setLoginState)} />
-            <input id="password" type="password" value={loginState.password} onChange={() => onChange(setLoginState)} />
-            <button onClick={() => { onSubmit(loginState, failed, succeeded); }}>Submit</button>
-        </form>
+        <>
+            <header>
+                <h1>Login</h1>
+            </header>
+            <form>
+                <label htmlFor="name">Name</label>
+                <input id="name" type="name" value={loginState.name} onChange={() => onChange(setLoginState)} />
+                <label htmlFor="email">Email</label>
+                <input id="email" type="email" value={loginState.email} onChange={() => onChange(setLoginState)} />
+                <label htmlFor="password">Password</label>
+                <input id="password" type="password" value={loginState.password} onChange={() => onChange(setLoginState)} />
+                <button onClick={() => { onSubmit(loginState, failed, succeeded); }}>Submit</button>
+            </form>
+        </>
     );
 }
