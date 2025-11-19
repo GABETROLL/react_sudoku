@@ -72,7 +72,7 @@ export default function Login({failed, succeeded}: {failed: () => void, succeede
             <header>
                 <h1>Login</h1>
             </header>
-            <form>
+            <form className="menu">
                 <label htmlFor="name">Name</label>
                 <input id="name" type="name" value={loginState.name} onChange={() => onChange(setLoginState)} />
                 <label htmlFor="email">Email</label>

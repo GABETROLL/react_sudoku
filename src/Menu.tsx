@@ -80,12 +80,16 @@ export default function Menu() {
 
   if (gameInfo.gameStage === GameStages.notYetStarted) {
     return (
-      <div className="menu">
-        <h2>Difficulty</h2>
-        <button onClick={() => innerStartGame(Difficulty.easy)}>Easy</button>
-        <button onClick={() => innerStartGame(Difficulty.medium)}>Medium</button>
-        <button onClick={() => innerStartGame(Difficulty.hard)}>Hard</button>
-      </div>
+      <>
+        <header>
+          <h1>Difficulty</h1>
+        </header>
+        <div className="menu">
+          <button onClick={() => innerStartGame(Difficulty.easy)}>Easy</button>
+          <button onClick={() => innerStartGame(Difficulty.medium)}>Medium</button>
+          <button onClick={() => innerStartGame(Difficulty.hard)}>Hard</button>
+        </div>
+      </>
     );
   } else if (gameInfo.gameStage === GameStages.loading) {
     return (

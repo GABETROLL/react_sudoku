@@ -69,12 +69,12 @@ button {
   background-color: var(--primary-color);
 }
 
-form {
+.menu {
+  max-width: 900px;
+  margin: auto;
+
   display: flex;
   flex-direction: column;
-
-  max-width: 600px;
-  margin: auto;
 
   text-align: center;
 }
