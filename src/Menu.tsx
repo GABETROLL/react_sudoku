@@ -50,12 +50,12 @@ export default function Menu() {
       } else {
         res.json().then((resJson: any) => {
           setGameInfo({...gameInfo, gameStage: GameStages.started, gameSessionId: resJson.gameSessionId});
-        }).catch((error: any) => {
+        }).catch(() => {
           setGameInfo({...gameInfo, gameStage: GameStages.failedToStartGame});
         });
       }
       
-    }).catch((error: any) => {
+    }).catch(() => {
       setGameInfo({...gameInfo, gameStage: GameStages.failedToStartGame});
     });
   }
@@ -69,11 +69,11 @@ export default function Menu() {
       } else {
         res.json().then((resJson: any) => {
           setGameInfo({...gameInfo, gameStage: GameStages.won, gameTimeMilliseconds: resJson.time});
-        }).catch((error: any) => {
+        }).catch(() => {
           setGameInfo({...gameInfo, gameStage: GameStages.failedToWin});
         });
       }
-    }).catch((error: any) => {
+    }).catch(() => {
       setGameInfo({...gameInfo, gameStage: GameStages.failedToWin});
     });
   }
